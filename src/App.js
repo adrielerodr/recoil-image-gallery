@@ -1,24 +1,33 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState, useEffect } from 'react';
 import './App.css';
+import { getPhotos } from './api';
+import Card from './components/card';
 
 function App() {
+  const [photos, setPhotos] = useState([]);
+
+  useEffect(() => {
+    async function getAllPhotos() {
+      try {
+        const response = await getPhotos();
+        setPhotos(response);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    getAllPhotos();
+  }, []);
+  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+    <div className="app">
+      <header className="app-header">
+        <p>Image Gallery</p>
       </header>
+      {
+        photos.map(img =>
+          <Card key={img.id} image={img} />
+        )
+      }
     </div>
   );
 }
