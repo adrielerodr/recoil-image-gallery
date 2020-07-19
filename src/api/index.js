@@ -6,7 +6,12 @@ const headers = {
   'Authorization': 'SGvRc95YDxsXxIBBx8laFrJJPU119I8RzvwHpn6uUN0',
 };
 
-const url = 'https://api.unsplash.com/photos/random?client_id=SGvRc95YDxsXxIBBx8laFrJJPU119I8RzvwHpn6uUN0&count=30&orientation=landscape';
+const api = 'https://api.unsplash.com/photos';
+const clientId = 'SGvRc95YDxsXxIBBx8laFrJJPU119I8RzvwHpn6uUN0';
+const count = 10;
+const orientation = 'landscape';
+
+const url = `${api}/random?client_id=${clientId}&count=${count}&orientation=${orientation}`;
 
 export const getPhotos = () => {
   return new Promise((resolve, reject) => {

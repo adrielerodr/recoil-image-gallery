@@ -1,33 +1,32 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import { useRecoilValueLoadable } from 'recoil';
 import './App.css';
-import { getPhotos } from './api';
 import Card from './components/card';
+import { fetchGalleryState } from './state/galleryState/selector';
 
 function App() {
-  const [photos, setPhotos] = useState([]);
-
-  useEffect(() => {
-    async function getAllPhotos() {
-      try {
-        const response = await getPhotos();
-        setPhotos(response);
-      } catch (error) {
-        console.log(error);
-      }
+  const gallery = useRecoilValueLoadable(fetchGalleryState);
+  const getGallery = () => {
+    switch (gallery.state) {
+      case 'hasValue':
+        return gallery.contents.map(img =>
+          <Card key={img.id} image={img} />
+        )
+      case 'loading':
+        return <div>Loading...</div>;
+      case 'hasError':
+        throw gallery.contents;
+      default:
+        return '';
     }
-    getAllPhotos();
-  }, []);
+  }
   
   return (
     <div className="app">
       <header className="app-header">
-        <p>Image Gallery</p>
+        <h1>Image Gallery</h1>
       </header>
-      {
-        photos.map(img =>
-          <Card key={img.id} image={img} />
-        )
-      }
+      { getGallery() }
     </div>
   );
 }
